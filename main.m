@@ -29,6 +29,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import <Security/Security.h>
 #import "sqlite3.h"
 
@@ -197,7 +198,15 @@ void printGenericPassword(NSDictionary *passwordItem) {
 	printToStdOut(@"Label: %@\n", [passwordItem objectForKey:(id)kSecAttrLabel]);
 	printToStdOut(@"Generic Field: %@\n", [[passwordItem objectForKey:(id)kSecAttrGeneric] description]);
 	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
-	printToStdOut(@"Keychain Data: %@\n\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+	printToStdOut(@"Keychain String: %@\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+    @try {
+        NSObject * root = [NSKeyedUnarchiver unarchiveObjectWithData: passwordData];
+        printToStdOut(@"Unarchived Data: %@\n", root);
+    } @catch (NSException *exception) {
+        printToStdOut(@"Exception: %@\n", exception.description);
+    } @finally {
+    }
+    printToStdOut(@"Keychain Data: %@\n\n", passwordData);
 }
 
 void printInternetPassword(NSDictionary *passwordItem) {
@@ -208,7 +217,15 @@ void printInternetPassword(NSDictionary *passwordItem) {
 	printToStdOut(@"Entitlement Group: %@\n", [passwordItem objectForKey:(id)kSecAttrAccessGroup]);
 	printToStdOut(@"Label: %@\n", [passwordItem objectForKey:(id)kSecAttrLabel]);
 	NSData* passwordData = [passwordItem objectForKey:(id)kSecValueData];
-	printToStdOut(@"Keychain Data: %@\n\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+	printToStdOut(@"Keychain String: %@\n", [[NSString alloc] initWithData:passwordData encoding:NSUTF8StringEncoding]);
+    @try {
+        NSObject * root = [NSKeyedUnarchiver unarchiveObjectWithData: passwordData];
+        printToStdOut(@"Unarchived Data: %@\n", root);
+    } @catch (NSException *exception) {
+        printToStdOut(@"Exception: %@\n", exception.description);
+    } @finally {
+    }
+    printToStdOut(@"Keychain Data: %@\n\n", passwordData);
 }
 
 
